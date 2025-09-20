@@ -34,7 +34,7 @@ namespace OpenGLTest
             gl_Position = vec4(aPosition, 1.0);
         }";
 
-        // Simple Fragment Shader
+        // Simple Fragment Shader for genrating coloers for each pixel on the triangle
         private const string FragmentShaderSource = @"
         #version 330 core
         out vec4 FragColor;
@@ -42,6 +42,7 @@ namespace OpenGLTest
         void main()
         {
             FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+            FragColor = vec4(0.2f, 0.5f, 1.0f, 1.0f);
         }";
 
         public Game()
