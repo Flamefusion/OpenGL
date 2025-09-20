@@ -24,6 +24,11 @@ namespace OpenGLTest
         private VertexArrayObject? _vao;
         private Shader? _shader;
 
+        private double _time;
+        private double _lastColorChangeTime;
+        private readonly Random _random = new Random();
+        private int _colorLocation;
+
         // Simple Vertex Shader
         private const string VertexShaderSource = @"
         #version 330 core
@@ -39,10 +44,11 @@ namespace OpenGLTest
         #version 330 core
         out vec4 FragColor;
 
+        uniform vec4 uColor;
+
         void main()
         {
-            FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-            FragColor = vec4(0.2f, 0.5f, 1.0f, 1.0f);
+            FragColor = uColor;
         }";
 
         public Game()
@@ -74,10 +80,23 @@ namespace OpenGLTest
             _vao = new VertexArrayObject(_gl);
             _vao.LinkAttribute(_vbo, 0, 3, VertexAttribPointerType.Float, 3, 0);
             _shader = new Shader(_gl, VertexShaderSource, FragmentShaderSource);
+            _shader.Use();
+            _colorLocation = _shader.GetUniformLocation("uColor");
         }
 
         private void OnRender(double deltaTime)
         {
+            _time += deltaTime;
+
+            if (_time - _lastColorChangeTime >= 1.0)
+            {
+                _lastColorChangeTime = _time;
+                float r = (float)_random.NextDouble();
+                float g = (float)_random.NextDouble();
+                float b = (float)_random.NextDouble();
+                _gl!.Uniform4(_colorLocation, r, g, b, 1.0f);
+            }
+
             _gl!.Clear(ClearBufferMask.ColorBufferBit);
 
             _vao!.Bind();

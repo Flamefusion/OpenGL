@@ -38,6 +38,11 @@ namespace OpenGLTest
             _gl.UseProgram(Handle);
         }
 
+        public int GetUniformLocation(string name)
+        {
+            return _gl.GetUniformLocation(Handle, name);
+        }
+
         private uint CompileShader(ShaderType type, string source)
         {
             uint shader = _gl.CreateShader(type);
